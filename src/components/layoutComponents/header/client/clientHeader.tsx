@@ -4,6 +4,7 @@ import { Button, Input, useDisclosure } from '@nextui-org/react';
 import ModalComponent from '@/components/UIComponents/ModalComponent';
 import { IoEyeOutline, IoEyeOffOutline } from 'react-icons/io5';
 import { useState } from 'react';
+import Image from 'next/image';
 
 const ClientHeader = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -20,7 +21,13 @@ const ClientHeader = () => {
         onOpenChange={onOpenChange}
         modalTitle={
           <div className="flex justify-center">
-            <Logo />
+            <Image
+              alt="Logo"
+              src="/images/logo.png"
+              width={250}
+              height={61}
+              className="w-full h-auto"
+            />
           </div>
         }
       >
