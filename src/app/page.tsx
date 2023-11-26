@@ -1,5 +1,11 @@
+import { Button } from '@nextui-org/button';
 const Home = () => {
-  return <div className="h-[200vh]">Home</div>;
+  return (
+    <div>
+      Home
+      <Button>Click me</Button>
+    </div>
+  );
 };
 
 export default Home;
