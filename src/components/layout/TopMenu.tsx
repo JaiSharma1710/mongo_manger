@@ -1,6 +1,6 @@
 'use client';
-import ModalComponent from '@/components/UIComponents/ModalComponent';
-import SelectComponent from '@/components/UIComponents/Select';
+import ModalComponent from '@/components/ui/ModalComponent';
+import SelectComponent from '@/components/ui/Select';
 import { Button, Input, useDisclosure } from '@nextui-org/react';
 import Image from 'next/image';
 import { useState } from 'react';
