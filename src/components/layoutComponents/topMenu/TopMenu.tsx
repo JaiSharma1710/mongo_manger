@@ -8,12 +8,25 @@ import { useState } from 'react';
 const TopMenu = () => {
   const [selectedDb, setSelectedDb] = useState('');
   const [dbList, setDbList] = useState([]);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [formValues, setFromValues] = useState({
+    mongoUri: '',
+    dbName: '',
+    dropDownName: '',
+  });
+
+  const handelFromSubmit = () => {
+    console.log(formValues);
+    onClose();
+  };
+
+  const disableSubmit =
+    !formValues.mongoUri || !formValues.dbName || !formValues.dropDownName;
 
   return (
     <div className="mb-2 flex gap-2">
       <Button className="h-auto" color="success" radius="sm" onClick={onOpen}>
-        Connect DataBase
+        Add DataBase
       </Button>
       <SelectComponent
         buttonText={selectedDb || 'Select DB'}
@@ -38,11 +51,38 @@ const TopMenu = () => {
           </div>
         }
       >
-        <Input type="text" label="Mongo URI" />
-        <Input type="text" label="DB Name" />
-        <Input type="text" label="DB DropDown Name" />
-        <Button color="success" radius="sm" className="mb-2">
-          Connect DataBase
+        <Input
+          type="text"
+          label="Mongo URI"
+          onChange={(e) =>
+            setFromValues((pre) => ({ ...pre, mongoUri: e.target.value }))
+          }
+          value={formValues.mongoUri}
+        />
+        <Input
+          type="text"
+          label="DB Name"
+          onChange={(e) =>
+            setFromValues((pre) => ({ ...pre, dbName: e.target.value }))
+          }
+          value={formValues.dbName}
+        />
+        <Input
+          type="text"
+          label="DB DropDown Name"
+          onChange={(e) =>
+            setFromValues((pre) => ({ ...pre, dropDownName: e.target.value }))
+          }
+          value={formValues.dropDownName}
+        />
+        <Button
+          onClick={handelFromSubmit}
+          color="success"
+          radius="sm"
+          className="mb-2"
+          isDisabled={disableSubmit}
+        >
+          Add DataBase
         </Button>
       </ModalComponent>
     </div>
