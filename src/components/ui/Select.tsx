@@ -1,28 +1,33 @@
-import React from 'react';
 import { Select, SelectItem } from '@nextui-org/react';
+import { formValuesType } from '../layout/TopMenu';
 
 type SelectProps = {
   buttonText: string;
-  dropDownItems: string[];
+  dropDownItems: formValuesType[];
   handleDropDownValueSelection: (selectedItem: string) => void;
+  selectedDb: formValuesType;
 };
 
 export default function SelectComponent({
   buttonText,
   dropDownItems,
   handleDropDownValueSelection,
+  selectedDb,
 }: SelectProps) {
   return (
     <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
-      <Select size="sm" color="success" label={buttonText} className="max-w-xs">
+      <Select
+        selectedKeys={selectedDb.dropDownName && [selectedDb.dropDownName]}
+        size="sm"
+        color="success"
+        label={buttonText}
+        className="max-w-xs"
+        onChange={(e) => handleDropDownValueSelection(e.target.value)}
+      >
         {dropDownItems.length ? (
-          dropDownItems.map((item, index) => (
-            <SelectItem
-              onPress={() => handleDropDownValueSelection(item)}
-              key={index}
-              value={item}
-            >
-              {item}
+          dropDownItems.map((item) => (
+            <SelectItem key={item.dropDownName} value={item.dropDownName}>
+              {item.dropDownName}
             </SelectItem>
           ))
         ) : (

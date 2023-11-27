@@ -20,13 +20,13 @@ const Header = () => {
           isOpen={isOpen}
           onOpenChange={onOpenChange}
           modalTitle={
-            <div className="flex justify-center">
+            <div className="text-center">
               <Image
                 alt="Logo"
                 src="/images/logo.png"
                 width={250}
                 height={61}
-                className="w-full h-auto"
+                className="w-48 mb-2 mx-auto h-auto"
               />
             </div>
           }

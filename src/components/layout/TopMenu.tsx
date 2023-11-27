@@ -1,23 +1,58 @@
 'use client';
+import Image from 'next/image';
+import toast from 'react-hot-toast';
 import ModalComponent from '@/components/ui/ModalComponent';
 import SelectComponent from '@/components/ui/Select';
 import { Button, Input, useDisclosure } from '@nextui-org/react';
-import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { addDataToLocalStorage, getDataFromLocalStorage } from '@/lib';
+
+export type formValuesType = {
+  mongoUri: string;
+  dbName: string;
+  dropDownName: string;
+};
+
+const initialFormValue = {
+  mongoUri: '',
+  dbName: '',
+  dropDownName: '',
+};
 
 const TopMenu = () => {
-  const [selectedDb, setSelectedDb] = useState('');
-  const [dbList, setDbList] = useState([]);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  const [formValues, setFromValues] = useState({
-    mongoUri: '',
-    dbName: '',
-    dropDownName: '',
-  });
+  const [selectedDb, setSelectedDb] =
+    useState<formValuesType>(initialFormValue);
+  const [dbList, setDbList] = useState<formValuesType[]>([]);
+  const [formValues, setFromValues] =
+    useState<formValuesType>(initialFormValue);
+
+  useEffect(() => {
+    const { db_list, selected_db } = getDataFromLocalStorage();
+    setDbList(db_list || []);
+    setSelectedDb(selected_db || initialFormValue);
+  }, []);
 
   const handelFromSubmit = () => {
-    console.log(formValues);
+    setDbList((pre) => {
+      addDataToLocalStorage('DB_LIST', [...pre, formValues]);
+      return [...pre, formValues];
+    });
+    setFromValues({
+      mongoUri: '',
+      dbName: '',
+      dropDownName: '',
+    });
     onClose();
+    toast.success('Database successfully added');
+  };
+
+  const onDropDownValueSelection = (selectedItem: string) => {
+    const DB = dbList.find((ele) => ele.dropDownName === selectedItem);
+    if (DB) {
+      setSelectedDb(DB);
+      addDataToLocalStorage('SELECTED_DB', DB);
+    }
   };
 
   const disableSubmit =
@@ -29,10 +64,9 @@ const TopMenu = () => {
         Add DataBase
       </Button>
       <SelectComponent
-        buttonText={selectedDb || 'Select DB'}
-        handleDropDownValueSelection={(selectedItem: string) => {
-          setSelectedDb(selectedItem);
-        }}
+        buttonText={selectedDb?.dropDownName || 'Select DB'}
+        handleDropDownValueSelection={onDropDownValueSelection}
+        selectedDb={selectedDb}
         dropDownItems={dbList}
       />
       <ModalComponent
