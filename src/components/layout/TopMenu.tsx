@@ -5,7 +5,11 @@ import ModalComponent from '@/components/ui/ModalComponent';
 import SelectComponent from '@/components/ui/Select';
 import { Button, Input, useDisclosure } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
-import { addDataToLocalStorage, getDataFromLocalStorage } from '@/lib';
+import {
+  addDataToLocalStorage,
+  getDataFromLocalStorage,
+  postData,
+} from '@/lib';
 
 export type formValuesType = {
   mongoUri: string;
@@ -47,11 +51,13 @@ const TopMenu = () => {
     toast.success('Database successfully added');
   };
 
-  const onDropDownValueSelection = (selectedItem: string) => {
+  const onDropDownValueSelection = async (selectedItem: string) => {
     const DB = dbList.find((ele) => ele.dropDownName === selectedItem);
     if (DB) {
       setSelectedDb(DB);
       addDataToLocalStorage('SELECTED_DB', DB);
+      const data = await postData('/api/getcollections', DB);
+      console.log(data);
     }
   };
 
