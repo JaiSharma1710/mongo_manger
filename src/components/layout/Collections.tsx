@@ -1,6 +1,6 @@
 'use client';
 import { Input } from '@nextui-org/react';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 type collections = {
   collections: string[];
@@ -34,14 +34,22 @@ const Collections = ({ collections }: collections) => {
         className="h-[10%]"
       />
       <div className="overflow-auto h-[90%]">
-        {collectionToShow.map((collection, index) => (
-          <div
-            key={index}
-            className="p-2 bg-green-50 hover:bg-green-100 cursor-pointer m-2 rounded-md"
-          >
-            {collection}
+        {collectionToShow.length ? (
+          collectionToShow.map((collection, index) => (
+            <div
+              key={index}
+              className="p-2 bg-green-50 hover:bg-green-100 cursor-pointer m-2 rounded-md"
+            >
+              {collection}
+            </div>
+          ))
+        ) : (
+          <div className="flex items-center justify-center h-[90%]">
+            <p className="bg-green-50 text-green-700 p-2 rounded-md">
+              No collection found
+            </p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
