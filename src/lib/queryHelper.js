@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 import { getData, getDataFromLocalStorage, postData } from '.';
 
-export const runQuery = async (setQueryResponse: any) => {
+export const runQuery = async (setQueryResponse) => {
   try {
     const selectedQuery = getSelectedText();
     const { selected_db } = getDataFromLocalStorage();
@@ -14,7 +14,7 @@ export const runQuery = async (setQueryResponse: any) => {
       selected_db,
     });
     setQueryResponse(data.data);
-  } catch (error: any) {
+  } catch (error) {
     toast.error(error?.response?.data?.message || error.message);
   }
 };
@@ -32,11 +32,11 @@ export const handelDownload = async () => {
   );
 };
 
-function getSelectedText(): string {
+function getSelectedText() {
   if (window.getSelection) {
-    return window.getSelection().toString();
+    return window.getSelection()?.toString() ?? '';
   } else if (document.selection && document.selection.type !== 'Control') {
-    return document.selection.createRange().text;
+    return document.selection.createRange().text ?? '';
   }
   return '';
 }
