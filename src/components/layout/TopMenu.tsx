@@ -21,6 +21,7 @@ export type formValuesType = {
 
 type TopMenuProps = {
   setCollections: ([]) => void;
+  setQueryResponse: any;
 };
 
 const initialFormValue = {
@@ -29,7 +30,7 @@ const initialFormValue = {
   dropDownName: '',
 };
 
-const TopMenu = ({ setCollections }: TopMenuProps) => {
+const TopMenu = ({ setCollections, setQueryResponse }: TopMenuProps) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [selectedDb, setSelectedDb] =
     useState<formValuesType>(initialFormValue);
@@ -98,7 +99,7 @@ const TopMenu = ({ setCollections }: TopMenuProps) => {
         className="h-auto w-[10%]"
         color="success"
         radius="sm"
-        onClick={runQuery}
+        onClick={() => runQuery(setQueryResponse)}
         startContent={<FaPlay className="w-32" />}
       >
         Run

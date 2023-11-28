@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 import { getDataFromLocalStorage, postData } from '.';
 
-export const runQuery = async () => {
+export const runQuery = async (setQueryResponse: any) => {
   try {
     const selectedQuery = getSelectedText();
     const { selected_db } = getDataFromLocalStorage();
@@ -13,7 +13,7 @@ export const runQuery = async () => {
       query: selectedQuery,
       selected_db,
     });
-    console.log(data);
+    setQueryResponse(data.data);
   } catch (error: any) {
     toast.error(error?.response?.data?.message || error.message);
   }
