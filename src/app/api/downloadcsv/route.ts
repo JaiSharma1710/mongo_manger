@@ -16,7 +16,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     }
 
     let finalQuery = '';
-    const clientPromise = connectMongo(mongoUri);
+    const clientPromise = connectMongo(process.env.mongoUri!);
     const client = await clientPromise;
     const db = await client.db();
 
