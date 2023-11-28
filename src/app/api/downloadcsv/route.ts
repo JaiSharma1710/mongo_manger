@@ -63,7 +63,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   } catch (error) {
     return NextResponse.json(
       {
-        message: `some error occurred while executing`,
+        message: `some error occurred while executing ${error}`,
       },
       { status: 500 },
     );
