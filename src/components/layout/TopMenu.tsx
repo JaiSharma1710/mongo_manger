@@ -17,13 +17,17 @@ export type formValuesType = {
   dropDownName: string;
 };
 
+type TopMenuProps = {
+  setCollections: ([]) => void;
+};
+
 const initialFormValue = {
   mongoUri: '',
   dbName: '',
   dropDownName: '',
 };
 
-const TopMenu = () => {
+const TopMenu = ({ setCollections }: TopMenuProps) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [selectedDb, setSelectedDb] =
     useState<formValuesType>(initialFormValue);
@@ -32,9 +36,10 @@ const TopMenu = () => {
     useState<formValuesType>(initialFormValue);
 
   useEffect(() => {
-    const { db_list, selected_db } = getDataFromLocalStorage();
+    const { db_list, selected_db, collection_list } = getDataFromLocalStorage();
     setDbList(db_list || []);
     setSelectedDb(selected_db || initialFormValue);
+    setCollections(collection_list);
   }, []);
 
   const handelFromSubmit = () => {
@@ -56,8 +61,9 @@ const TopMenu = () => {
     if (DB) {
       setSelectedDb(DB);
       addDataToLocalStorage('SELECTED_DB', DB);
-      const data = await postData('/api/getcollections', DB);
-      console.log(data);
+      const { data } = await postData('/api/getcollections', DB);
+      setCollections(data.collections);
+      addDataToLocalStorage('COLLECTION_LIST', data.collections);
     }
   };
 

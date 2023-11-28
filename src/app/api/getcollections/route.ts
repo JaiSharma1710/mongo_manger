@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     const db = await client.db();
     const data = await db.listCollections().toArray();
     const collections = data.map((collection: any) => collection.name);
-    return NextResponse.json({ data: collections });
+    return NextResponse.json({ collections });
   } catch (error) {
     return NextResponse.json(
       { data: 'connection to db failed' },

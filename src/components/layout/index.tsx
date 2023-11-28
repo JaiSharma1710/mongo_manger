@@ -1,4 +1,4 @@
 import TopMenu from './TopMenu';
 import Header from './Header';
-
-export { TopMenu, Header };
+import Collections from './Collections';
+export { TopMenu, Header, Collections };
