@@ -20,7 +20,7 @@ export const getDataFromLocalStorage = (): {
 
   keys.forEach((key) => {
     const storedValue = localStorage.getItem(key);
-    if (storedValue !== null) {
+    if (!!storedValue) {
       localStorageData[key] = JSON.parse(storedValue);
     } else {
       localStorageData[key] = null;

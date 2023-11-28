@@ -6,6 +6,7 @@ type SelectProps = {
   dropDownItems: formValuesType[];
   handleDropDownValueSelection: (selectedItem: string) => void;
   selectedDb: formValuesType;
+  className: string;
 };
 
 export default function SelectComponent({
@@ -13,6 +14,7 @@ export default function SelectComponent({
   dropDownItems,
   handleDropDownValueSelection,
   selectedDb,
+  className,
 }: SelectProps) {
   return (
     <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
@@ -21,7 +23,7 @@ export default function SelectComponent({
         size="sm"
         color="success"
         label={buttonText}
-        className="max-w-xs"
+        className={`max-w-xs ${className}`}
         onChange={(e) => handleDropDownValueSelection(e.target.value)}
       >
         {dropDownItems.length ? (

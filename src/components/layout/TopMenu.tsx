@@ -5,10 +5,12 @@ import ModalComponent from '@/components/ui/ModalComponent';
 import SelectComponent from '@/components/ui/Select';
 import { Button, Input, useDisclosure } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
+import { FaFileExcel, FaPlay } from 'react-icons/fa';
 import {
   addDataToLocalStorage,
   getDataFromLocalStorage,
   postData,
+  runQuery,
 } from '@/lib';
 
 export type formValuesType = {
@@ -39,7 +41,8 @@ const TopMenu = ({ setCollections }: TopMenuProps) => {
     const { db_list, selected_db, collection_list } = getDataFromLocalStorage();
     setDbList(db_list || []);
     setSelectedDb(selected_db || initialFormValue);
-    setCollections(collection_list);
+    setCollections(collection_list || []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handelFromSubmit = () => {
@@ -61,7 +64,11 @@ const TopMenu = ({ setCollections }: TopMenuProps) => {
     if (DB) {
       setSelectedDb(DB);
       addDataToLocalStorage('SELECTED_DB', DB);
-      const { data } = await postData('/api/getcollections', DB);
+      const { data, status } = await postData('/api/getcollections', DB);
+      if (status !== 200) {
+        toast.error('cannot connect to DB. check your URI');
+        return;
+      }
       setCollections(data.collections);
       addDataToLocalStorage('COLLECTION_LIST', data.collections);
     }
@@ -72,15 +79,39 @@ const TopMenu = ({ setCollections }: TopMenuProps) => {
 
   return (
     <div className="mb-2 flex gap-2">
-      <Button className="h-auto" color="success" radius="sm" onClick={onOpen}>
+      <Button
+        className="h-auto w-[10%]"
+        color="success"
+        radius="sm"
+        onClick={onOpen}
+      >
         Add DataBase
       </Button>
       <SelectComponent
+        className="w-[70%]"
         buttonText={selectedDb?.dropDownName || 'Select DB'}
         handleDropDownValueSelection={onDropDownValueSelection}
         selectedDb={selectedDb}
         dropDownItems={dbList}
       />
+      <Button
+        className="h-auto w-[10%]"
+        color="success"
+        radius="sm"
+        onClick={runQuery}
+        startContent={<FaPlay className="w-32" />}
+      >
+        Run
+      </Button>
+      <Button
+        className="h-auto w-[10%]"
+        color="success"
+        radius="sm"
+        onClick={() => {}}
+        startContent={<FaFileExcel className="w-60" />}
+      >
+        Download
+      </Button>
       <ModalComponent
         onOpenChange={onOpenChange}
         isOpen={isOpen}
