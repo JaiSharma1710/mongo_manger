@@ -3,7 +3,7 @@ import {
   getDataFromLocalStorage,
 } from './localStorageHelper';
 import { getData, postData } from './apiHelper';
-import { runQuery } from './queryHelper';
+import { runQuery, handelDownload } from './queryHelper';
 
 export {
   addDataToLocalStorage,
@@ -11,4 +11,5 @@ export {
   getData,
   postData,
   runQuery,
+  handelDownload,
 };

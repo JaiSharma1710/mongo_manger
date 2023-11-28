@@ -1,11 +1,12 @@
 import { connectMongo } from '@/lib/mongo';
 import { NextRequest, NextResponse } from 'next/server';
+import { Parser } from '@json2csv/plainjs';
 
-export async function POST(req: NextRequest) {
-  const {
-    query,
-    selected_db: { mongoUri },
-  } = await req.json();
+export async function GET(req: NextRequest, res: NextResponse) {
+  const { searchParams } = new URL(req.url);
+  const mongoUri = searchParams.get('mongoUri') || '';
+  const query = searchParams.get('query') || '';
+
   try {
     if (!mongoUri) {
       return NextResponse.json(
@@ -45,9 +46,20 @@ export async function POST(req: NextRequest) {
         { status: 500 },
       );
     }
+
     finalQuery = query.trim();
     const data = await eval(`${finalQuery}.toArray()`);
-    return NextResponse.json({ data });
+    const parser = new Parser({ header: true });
+    const csvData = parser.parse(data);
+
+    // Set response headers for file download
+    const response = new NextResponse(csvData, {
+      headers: {
+        'Content-Type': 'text/csv',
+        'Content-Disposition': 'attachment; filename=users.csv',
+      },
+    });
+    return response;
   } catch (error) {
     return NextResponse.json(
       {

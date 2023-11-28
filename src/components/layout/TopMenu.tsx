@@ -9,6 +9,7 @@ import { FaFileExcel, FaPlay } from 'react-icons/fa';
 import {
   addDataToLocalStorage,
   getDataFromLocalStorage,
+  handelDownload,
   postData,
   runQuery,
 } from '@/lib';
@@ -108,7 +109,7 @@ const TopMenu = ({ setCollections, setQueryResponse }: TopMenuProps) => {
         className="h-auto w-[10%]"
         color="success"
         radius="sm"
-        onClick={() => {}}
+        onClick={handelDownload}
         startContent={<FaFileExcel className="w-60" />}
       >
         Download

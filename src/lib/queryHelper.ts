@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast';
-import { getDataFromLocalStorage, postData } from '.';
+import { getData, getDataFromLocalStorage, postData } from '.';
 
 export const runQuery = async (setQueryResponse: any) => {
   try {
@@ -17,6 +17,19 @@ export const runQuery = async (setQueryResponse: any) => {
   } catch (error: any) {
     toast.error(error?.response?.data?.message || error.message);
   }
+};
+
+export const handelDownload = async () => {
+  const selectedQuery = getSelectedText();
+  const { selected_db } = getDataFromLocalStorage();
+  if (!selectedQuery) {
+    toast.error('no query selected');
+    return;
+  }
+
+  window.location.assign(
+    `/api/downloadcsv?mongoUri=${selected_db.mongoUri}&query=${selectedQuery}`,
+  );
 };
 
 function getSelectedText(): string {
