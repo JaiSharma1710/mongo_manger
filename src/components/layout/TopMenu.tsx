@@ -66,7 +66,11 @@ const TopMenu = ({ setCollections, setQueryResponse }: TopMenuProps) => {
     if (DB) {
       setSelectedDb(DB);
       addDataToLocalStorage('SELECTED_DB', DB);
-      const { data, status } = await postData('/api/getcollections', DB);
+      const { data, status } = await postData(
+        'http://localhost:9000/getCollections',
+        DB,
+      );
+
       if (status !== 200) {
         toast.error('cannot connect to DB. check your URI');
         return;
