@@ -67,7 +67,7 @@ const TopMenu = ({ setCollections, setQueryResponse }: TopMenuProps) => {
       setSelectedDb(DB);
       addDataToLocalStorage('SELECTED_DB', DB);
       const { data, status } = await postData(
-        'http://localhost:9000/getCollections',
+        'https://mongo-manager-backend.vercel.app/getCollections',
         DB,
       );
 

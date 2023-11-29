@@ -9,10 +9,13 @@ export const runQuery = async (setQueryResponse) => {
       toast.error('no query selected');
       return;
     }
-    const { data, status } = await postData('http://localhost:9000/runQuery', {
-      query: selectedQuery,
-      selected_db,
-    });
+    const { data, status } = await postData(
+      'https://mongo-manager-backend.vercel.app/runQuery',
+      {
+        query: selectedQuery,
+        selected_db,
+      },
+    );
 
     if (status !== 200) {
       toast.error('cannot connect to DB. check your URI');
@@ -33,10 +36,13 @@ export const handelDownload = async () => {
     return;
   }
 
-  const { data, status } = await postData('http://localhost:9000/createCsv', {
-    selected_db,
-    selectedQuery,
-  });
+  const { data, status } = await postData(
+    'https://mongo-manager-backend.vercel.app/createCsv',
+    {
+      selected_db,
+      selectedQuery,
+    },
+  );
   if (status === 200) {
     window.location.assign(data);
   } else {
