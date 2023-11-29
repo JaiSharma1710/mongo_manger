@@ -37,9 +37,8 @@ export const handelDownload = async () => {
     selected_db,
     selectedQuery,
   });
-
   if (status === 200) {
-    window.location.assign('http://localhost:9000/downloadcsv');
+    window.location.assign(data);
   } else {
     toast.error(`something went wrong`);
     console.log(data);
