@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 import { Toaster } from 'react-hot-toast';
 import { Inter } from 'next/font/google';
 
+import { Header } from '@/components';
 import { Providers } from '@/provider/provider';
 
 import './globals.css';
-import { Header } from '@/components';
 
 const inter = Inter({ subsets: ['latin'] });
 

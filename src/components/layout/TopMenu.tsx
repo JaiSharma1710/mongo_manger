@@ -23,6 +23,7 @@ export type formValuesType = {
 type TopMenuProps = {
   setCollections: ([]) => void;
   setQueryResponse: any;
+  setIsLoading: any;
 };
 
 const initialFormValue = {
@@ -31,7 +32,11 @@ const initialFormValue = {
   dropDownName: '',
 };
 
-const TopMenu = ({ setCollections, setQueryResponse }: TopMenuProps) => {
+const TopMenu = ({
+  setCollections,
+  setQueryResponse,
+  setIsLoading,
+}: TopMenuProps) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [selectedDb, setSelectedDb] =
     useState<formValuesType>(initialFormValue);
@@ -67,7 +72,7 @@ const TopMenu = ({ setCollections, setQueryResponse }: TopMenuProps) => {
       setSelectedDb(DB);
       addDataToLocalStorage('SELECTED_DB', DB);
       const { data, status } = await postData(
-        'https://mongo-manager-backend.vercel.app/getCollections',
+        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/getCollections`,
         DB,
       );
 
@@ -104,7 +109,7 @@ const TopMenu = ({ setCollections, setQueryResponse }: TopMenuProps) => {
         className="h-auto w-[10%]"
         color="success"
         radius="sm"
-        onClick={() => runQuery(setQueryResponse)}
+        onClick={() => runQuery(setQueryResponse, setIsLoading)}
         startContent={<FaPlay className="w-32" />}
       >
         Run
@@ -113,7 +118,7 @@ const TopMenu = ({ setCollections, setQueryResponse }: TopMenuProps) => {
         className="h-auto w-[10%]"
         color="success"
         radius="sm"
-        onClick={handelDownload}
+        onClick={() => handelDownload(setIsLoading)}
         startContent={<FaFileExcel className="w-60" />}
       >
         Download

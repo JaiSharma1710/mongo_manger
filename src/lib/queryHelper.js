@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 import { getDataFromLocalStorage, postData } from '.';
 
-export const runQuery = async (setQueryResponse) => {
+export const runQuery = async (setQueryResponse, setIsLoading) => {
   try {
     const selectedQuery = getSelectedText();
     const { selected_db } = getDataFromLocalStorage();
@@ -9,14 +9,15 @@ export const runQuery = async (setQueryResponse) => {
       toast.error('no query selected');
       return;
     }
+    setIsLoading(true);
     const { data, status } = await postData(
-      'https://mongo-manager-backend.vercel.app/runQuery',
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/runQuery`,
       {
         query: selectedQuery,
         selected_db,
       },
     );
-
+    setIsLoading(false);
     if (status !== 200) {
       toast.error('cannot connect to DB. check your URI');
       return;
@@ -28,21 +29,22 @@ export const runQuery = async (setQueryResponse) => {
   }
 };
 
-export const handelDownload = async () => {
+export const handelDownload = async (setIsLoading) => {
   const selectedQuery = getSelectedText();
   const { selected_db } = getDataFromLocalStorage();
   if (!selectedQuery) {
     toast.error('no query selected');
     return;
   }
-
+  setIsLoading(true);
   const { data, status } = await postData(
-    'https://mongo-manager-backend.vercel.app/createCsv',
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/createCsv`,
     {
       selected_db,
       selectedQuery,
     },
   );
+  setIsLoading(false);
   if (status === 200) {
     window.location.assign(data);
   } else {

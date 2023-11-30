@@ -13,8 +13,9 @@ type ModalProps = {
   onClose?: () => void;
   onOpenChange?: () => void;
   modalTitle?: string | ReactNode;
-  children: ReactNode;
+  children?: ReactNode;
   showFooter?: boolean;
+  hideCloseButton?: boolean;
 };
 
 const ModalComponent = ({
@@ -23,9 +24,15 @@ const ModalComponent = ({
   modalTitle,
   children,
   showFooter = false,
+  hideCloseButton,
 }: ModalProps) => {
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false}>
+    <Modal
+      hideCloseButton={hideCloseButton}
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      isDismissable={false}
+    >
       <ModalContent>
         {(onClose) => (
           <>
