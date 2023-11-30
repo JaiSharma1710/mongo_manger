@@ -11,7 +11,7 @@ export const runQuery = async (setQueryResponse, setIsLoading) => {
     }
     setIsLoading(true);
     const { data, status } = await postData(
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/runQuery`,
+      `https://mongo-manager-backend.vercel.app/runQuery`,
       {
         query: selectedQuery,
         selected_db,
@@ -38,7 +38,7 @@ export const handelDownload = async (setIsLoading) => {
   }
   setIsLoading(true);
   const { data, status } = await postData(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/createCsv`,
+    `https://mongo-manager-backend.vercel.app/createCsv`,
     {
       selected_db,
       selectedQuery,

@@ -72,7 +72,7 @@ const TopMenu = ({
       setSelectedDb(DB);
       addDataToLocalStorage('SELECTED_DB', DB);
       const { data, status } = await postData(
-        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/getCollections`,
+        `https://mongo-manager-backend.vercel.app/getCollections`,
         DB,
       );
 
