@@ -2,12 +2,27 @@
 import { Collections, Output, Query, TopMenu } from '@/components/layout';
 import { ModalComponent } from '@/components/ui';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Home = () => {
   const [collections, setCollections] = useState<string[]>([]);
   const [queryResponse, setQueryResponse] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [query, setQuery] = useState('');
+  const [activateDownload, setActivateDownload] = useState(false);
+
+  useEffect(() => {
+    if (!!query && queryResponse.length) {
+      setActivateDownload(true);
+    } else {
+      setActivateDownload(false);
+    }
+  }, [queryResponse, query]);
+
+  useEffect(() => {
+    setQueryResponse([]);
+  }, [query]);
+
   return (
     <>
       <ModalComponent hideCloseButton isOpen={isLoading}>
@@ -26,11 +41,13 @@ const Home = () => {
           setCollections={setCollections}
           setQueryResponse={setQueryResponse}
           setIsLoading={setIsLoading}
+          query={query}
+          activateDownload={activateDownload}
         />
         <div className="flex h-[78vh] gap-1">
           <Collections collections={collections} />
           <div className="w-3/4">
-            <Query />
+            <Query setQuery={setQuery} />
             <Output queryResponse={queryResponse} />
           </div>
         </div>

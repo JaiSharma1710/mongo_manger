@@ -9,7 +9,6 @@ import { FaFileExcel, FaPlay } from 'react-icons/fa';
 import {
   addDataToLocalStorage,
   getDataFromLocalStorage,
-  handelDownload,
   postData,
   runQuery,
 } from '@/lib';
@@ -24,6 +23,8 @@ type TopMenuProps = {
   setCollections: ([]) => void;
   setQueryResponse: any;
   setIsLoading: any;
+  query: string;
+  activateDownload: boolean;
 };
 
 const initialFormValue = {
@@ -36,6 +37,8 @@ const TopMenu = ({
   setCollections,
   setQueryResponse,
   setIsLoading,
+  query,
+  activateDownload,
 }: TopMenuProps) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [selectedDb, setSelectedDb] =
@@ -72,7 +75,7 @@ const TopMenu = ({
       setSelectedDb(DB);
       addDataToLocalStorage('SELECTED_DB', DB);
       const { data, status } = await postData(
-        `https://mongo-manager-backend.vercel.app/getCollections`,
+        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/getCollections`,
         DB,
       );
 
@@ -87,7 +90,6 @@ const TopMenu = ({
 
   const disableSubmit =
     !formValues.mongoUri || !formValues.dbName || !formValues.dropDownName;
-
   return (
     <div className="mb-2 flex gap-2">
       <Button
@@ -109,20 +111,38 @@ const TopMenu = ({
         className="h-auto w-[10%]"
         color="success"
         radius="sm"
-        onClick={() => runQuery(setQueryResponse, setIsLoading)}
+        onClick={() => runQuery(setQueryResponse, setIsLoading, query)}
         startContent={<FaPlay className="w-32" />}
       >
         Run
       </Button>
-      <Button
-        className="h-auto w-[10%]"
-        color="success"
-        radius="sm"
-        onClick={() => handelDownload(setIsLoading)}
-        startContent={<FaFileExcel className="w-60" />}
-      >
-        Download
-      </Button>
+      {activateDownload ? (
+        <form
+          method="POST"
+          action={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/createCsv`}
+        >
+          <input type="hidden" name="dbName" value={selectedDb.dbName} />
+          <input type="hidden" name="mongoUri" value={selectedDb.mongoUri} />
+          <input type="hidden" name="query" value={query} />
+          <button
+            className="w-full rounded-md bg-green-500 px-4 h-full hover:bg-green-400 flex justify-between items-center gap-2"
+            type="submit"
+          >
+            <FaFileExcel /> Download
+          </button>
+        </form>
+      ) : (
+        <Button
+          className="h-auto w-[10%]"
+          color="success"
+          radius="sm"
+          onClick={() =>
+            toast.error('download only available once you run your query')
+          }
+        >
+          Download
+        </Button>
+      )}
       <ModalComponent
         onOpenChange={onOpenChange}
         isOpen={isOpen}
